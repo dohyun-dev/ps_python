@@ -1,16 +1,11 @@
-import sys; input = lambda : sys.stdin.readline().rstrip()
+from itertools import combinations
 
-def dfs(l=0, s=0, cnt=0):
-    global answer
-    if l == N:
-        if cnt != 0 and s == S:
-            answer += 1
-        return
-    dfs(l+1, s + arr[l], cnt+1)
-    dfs(l+1, s, cnt)
-
-N, S = map(int, input().split())
-arr = list(map(int, input().split()))
+N, M = map(int, input().split())
+nums = list(map(int, input().split()))
 answer = 0
-dfs()
+
+for i in range(1, N+1):
+    for c in combinations(nums, i):
+        if sum(c) == M:
+            answer += 1
 print(answer)
