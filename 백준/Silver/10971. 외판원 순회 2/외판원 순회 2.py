@@ -1,15 +1,16 @@
-def dfs(l, cur, start, total=0):
+def dfs(start, cur, total=0, cnt=0):
     global answer
-    if total >= answer:
+    if (cnt != 0 and cnt != N and cur == start) or answer <= total:
         return
-    if l == N:
+    if cnt == N:
         if cur == start:
-            answer = total + board[cur][start]
+            answer = min(answer, total)
+        return
     for i in range(N):
-        if check[i] or not board[cur][i]:
+        if not board[cur][i] or check[i]:
             continue
         check[i] = True
-        dfs(l+1, i, start, total + board[cur][i])
+        dfs(start, i, total+board[cur][i], cnt+1)
         check[i] = False
 
 N = int(input())
@@ -17,5 +18,5 @@ board = [list(map(int, input().split())) for _ in range(N)]
 check = [False] * N
 answer = float("inf")
 for i in range(N):
-    dfs(0, i, i)
+    dfs(i, i)
 print(answer)
