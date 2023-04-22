@@ -1,22 +1,23 @@
-import sys; input = lambda : sys.stdin.readline().rstrip()    
+def check(tmp):
+    if len(tmp) == 1:
+        return True
+    for limit in range(1, len(tmp) // 2 + 1):
+        for i in range(0, len(tmp) - limit * 2 + 1):
+            if tmp[i:i+limit] == tmp[i+limit:i+limit*2]:
+                return False
+    return True
 
-n = int(input())
-result = []
 
-def check(length):
-    for i in range(1, length // 2 + 1):
-        if result[-i:] == result[-2 * i: -i]: return True
-    else:   return False
+def dfs(result=""):
+    if len(result) == N:
+        print(result)
+        exit()
 
-def permutation(l=0):
-    if check(l):    return False
-    if l == n:
-        print("".join(result))
-        return True;
-    for i in ["1", "2", "3"]:
-        result.append(i)
-        if permutation(l+1): return True
-        result.pop()
-    return False
+    for i in ("1", "2", "3"):
+        tmp = result + i
+        if check(tmp):
+            dfs(tmp)
 
-permutation()
+N = int(input())
+answer = []
+dfs()
