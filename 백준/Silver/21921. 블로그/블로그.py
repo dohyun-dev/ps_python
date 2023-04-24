@@ -1,17 +1,17 @@
 N, X = map(int, input().split())
 visitor = list(map(int, input().split()))
-cnt, right = 0, 0
-max_cnt, max_period = 0, 0
-for left in range(N-X+1):
-    while right - left != X:
-        cnt += visitor[right]
-        right += 1
-    if cnt > max_cnt:
-        max_cnt, max_period = cnt, 1
-    elif cnt == max_cnt:
-        max_period += 1
-    cnt -= visitor[left]
+total = sum(visitor[:X])
+max_cnt, cnt = total, 1
+
+for i in range(X, N):
+    total += visitor[i]
+    total -= visitor[i-X]
+    if max_cnt < total:
+        max_cnt = total
+        cnt = 1
+    elif max_cnt == total:
+        cnt += 1
 if max_cnt:
-    print(max_cnt, max_period, sep="\n")
+    print(max_cnt, cnt, sep="\n")
 else:
     print("SAD")
