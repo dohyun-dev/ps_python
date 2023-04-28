@@ -7,7 +7,8 @@ while left <= right:
     mid = (left + right) // 2
     total = sum(min(mid, num) for num in arr)
     if total <= limit:
+        answer = mid
         left = mid + 1
     else:
         right = mid - 1
-print(right)
+print(answer)
