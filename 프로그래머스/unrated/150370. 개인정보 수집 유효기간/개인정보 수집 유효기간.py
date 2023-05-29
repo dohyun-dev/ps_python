@@ -1,19 +1,12 @@
-# 날짜를 받아서 day로 변환
-# 각 정책에 따라 day +
-# 현재 날짜와 비교해 더 크다면 폐기
-
-def calc_day(date):
-    date = list(map(int, date.split(".")))
-    return date[0] * 12 * 28 + date[1] * 28 + date[2]
+def convert_stamp(date):
+    year, month, day = map(int, date.split("."))
+    return (year * 12 * 28) + (month * 28) + day
 
 def solution(today, terms, privacies):
-    today = calc_day(today)
-    terms_dict = {t[0]: int(t[2:]) * 28 for t in terms}
+    terms_dict = {term[0]: int(term[2:]) * 28 for term in terms}
+    today = convert_stamp(today)
     answer = []
-    
-    for idx, v in enumerate(privacies, 1):
-        date, terms_name = v.split()
-        date = calc_day(date)
-        if today >= date + terms_dict[terms_name]:
+    for idx, privacy in enumerate(privacies, 1):
+        if today >= convert_stamp(privacy[:-2]) + terms_dict[privacy[-1]]:
             answer.append(idx)
     return answer
