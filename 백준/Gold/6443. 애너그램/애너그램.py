@@ -1,20 +1,23 @@
-def dfs(l=0, result=""):
+def dfs(l=0, result=''):
     if l == len(word):
-        if result not in check_set1:
-            check_set1.add(result)
-            print(result)
+        answer.append(result)
         return
-    for i, c in enumerate(word):
-        if check[i] or result + c in check_set2:
+
+    for i in range(len(word)):
+        make_word = result + word[i]
+
+        if check[i] or make_word in check_word:
             continue
+
+        check_word.add(make_word)
         check[i] = True
-        check_set2.add(result + c)
-        dfs(l+1, result + c)
+        dfs(l + 1, make_word)
         check[i] = False
 
-check_set1 = set()
+answer = []
 for _ in range(int(input())):
     word = sorted(input())
+    check_word = set()
     check = [False] * len(word)
-    check_set2 = set()
     dfs()
+print(*answer, sep="\n")
