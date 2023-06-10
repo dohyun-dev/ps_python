@@ -1,32 +1,32 @@
-def make_check_set(x, y):
-    check_set = set()
-    for i in range(9):
-        if board[x][i] != 0:
-            check_set.add(board[x][i])
-        if board[i][y] != 0:
-            check_set.add(board[i][y])
-    row_start, col_start = x // 3 * 3, y // 3 * 3
-    for nx in range(row_start, row_start + 3):
-        for ny in range(col_start, col_start + 3):
-            if board[nx][ny] != 0:
-                check_set.add(board[nx][ny])
-    return set(range(1, 10)) - check_set
+def get_available_number(x, y):
+    x_start, y_start = x // 3 * 3, y // 3 * 3
+    exist_number = set()
 
-def dfs(l=0):
-    if l == len(zero_list):
-        for i in range(9):
-            print(" ".join(map(str, board[i])))
+    for i in range(x_start, x_start + 3):
+        for j in range(y_start, y_start + 3):
+            exist_number.add(board[i][j])
+
+    for i in range(9):
+        exist_number.add(board[x][i])
+        exist_number.add(board[i][y])
+
+    return set(range(1, 10)) - exist_number
+
+def dfs(cnt=0):
+    if cnt == 9 ** 2:
+        for b in board:
+            print(*b)
         exit()
-    x, y =  zero_list[l]
-    for num in make_check_set(x, y):
-        board[x][y] = num
-        dfs(l+1)
-        board[x][y] = 0
+
+    x, y = cnt // 9, cnt % 9
+
+    if board[x][y] == 0:
+        for num in get_available_number(x, y):
+            board[x][y] = num
+            dfs(cnt + 1)
+            board[x][y] = 0
+    else:
+        dfs(cnt + 1)
 
 board = [list(map(int, input().split())) for _ in range(9)]
-zero_list = []
-for i in range(9):
-    for j in range(9):
-        if board[i][j] == 0:
-            zero_list.append((i, j))
 dfs()
