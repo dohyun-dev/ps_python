@@ -1,54 +1,39 @@
-def find(parent, a):
-    if parent[a] != a:
-        parent[a] = find(parent, parent[a])
+def dfs(cur, parent=-1):
+    visited[cur] = True
 
-    return parent[a]
-
-def union(parent, a, b):
-    p1 = find(parent, a)
-    p2 = find(parent, b)
-    if p1 != p2:
-        if p1 > p2:
-            parent[p1] = p2
-        else:
-            parent[p2] = p1
-
-case = 0
-while True:
-    n, m = map(int, input().rstrip().split())
-    if n == 0 and m == 0:
-        break
-    parent = [i for i in range(n+1)]
-    cycle = []
-    for _ in range(m):
-        a, b = map(int, input().rstrip().split())
-        p1 = find(parent, a)
-        p2 = find(parent, b)
-        if p1 != p2:
-            union(parent, a, b)
-        else:
-            # cycle이 발생한 케이스이므로 따로 저장
-            cycle.append(a)
-    # 갱신
-    for i in range(n+1):
-        find(parent, i)
-
-    # cycle이 있는 그룹들 저장
-    group = set()
-    for cycle_vertex in cycle:
-        group.add(parent[cycle_vertex])
-
-    answer = 0
-    for i in range(1, n+1):
-        if parent[i] in group:
+    for next_node in graph[cur]:
+        if next_node == parent:
             continue
-        answer += 1
-        group.add(parent[i])
+        if visited[next_node] or not dfs(next_node, cur):
+            return False
+    return True
 
-    case += 1
-    if answer == 0:
-        print("Case %d: No trees."%(case))
+t = 1
+while True:
+    N, M = map(int, input().split())
+
+    if N == 0 and M == 0:
+        break
+
+    graph = {i: [] for i in range(1, N + 1)}
+    visited = [False] * (N + 1)
+    answer = 0
+
+    for _ in range(M):
+        a, b = map(int, input().split())
+        graph[a].append(b)
+        graph[b].append(a)
+
+    for i in range(1, N + 1):
+        if visited[i]:
+            continue
+        if dfs(i):
+            answer += 1
+
+    if answer > 1:
+        print("Case {:d}: A forest of {:d} trees.".format(t, answer))
     elif answer == 1:
-        print("Case %d: There is one tree."%(case))
+        print("Case {:d}: There is one tree.".format(t))
     else:
-        print("Case %d: A forest of %d trees."%(case, answer))
+        print("Case {:d}: No trees.".format(t))
+    t += 1
