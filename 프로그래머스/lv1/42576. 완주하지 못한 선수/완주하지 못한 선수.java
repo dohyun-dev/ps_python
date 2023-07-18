@@ -1,30 +1,31 @@
 import java.util.*;
 
+
 class Solution {
     
-    HashMap<String, Integer> map = new HashMap<>();
+    Map<String, Integer> counter = new HashMap<>();
     
     public String solution(String[] participant, String[] completion) {
         
-        // map 초기화
         for(int i = 0; i < participant.length; i++) {
-            String person = participant[i];
-            if (!map.containsKey(person))
-                map.put(person, 0);
-            map.put(person, map.get(person) + 1);
+            String key = participant[i];
+            counter.put(key, counter.getOrDefault(key, 0) + 1);
         }
         
-        // 완주자 빼기
         for(int i = 0; i < completion.length; i++) {
-            String person = completion[i];
-            map.put(person, map.get(person) - 1);
+            String key = completion[i];
+            counter.put(key, counter.get(key) - 1);
+            
+            if (counter.get(key) == 0)
+                counter.remove(key);
         }
-        // 미완주자 출력
-        for(String p : map.keySet()) {
-            if (!map.get(p).equals(0)) {
-                return p;   
-            }
+        
+        String answer = "";
+        
+        for(String name : counter.keySet()) {
+            answer = name;    
         }
-        return "0";
+        
+        return answer;
     }
 }
