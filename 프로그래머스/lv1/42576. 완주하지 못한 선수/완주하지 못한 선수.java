@@ -20,12 +20,14 @@ class Solution {
                 counter.remove(key);
         }
         
+        return getAnswer();
+    }
+
+    String getAnswer() {
         String answer = "";
-        
         for(String name : counter.keySet()) {
-            answer = name;    
+            return name;    
         }
-        
-        return answer;
+        return null;
     }
 }
