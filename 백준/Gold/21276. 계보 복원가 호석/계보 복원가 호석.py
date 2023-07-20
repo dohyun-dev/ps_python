@@ -1,35 +1,33 @@
-from collections import Counter, deque
+from distutils.log import fatal
+import sys; input = lambda : sys.stdin.readline().rstrip()
+from collections import deque
 
-N = int(input())
-names = input().split()
-M = int(input())
-in_degree = Counter()
-graph = {name: [] for name in names}
-answer = {name: [] for name in names}
-
-for name in names:
-    in_degree[name] = 0
+N, graph, M = int(input()), {name:[] for name in input().split()}, int(input())
+indegree = {name:0 for name in graph.keys()}
 
 for _ in range(M):
     a, b = input().split()
     graph[b].append(a)
-    in_degree[a] += 1
+    indegree[a] += 1
 
-q = deque([name for name in names if in_degree[name] == 0])
-parent = [*q]
+q = deque()    
+root = []
+child = {name:[] for name in graph.keys()}
+
+for cur in graph.keys():
+    if indegree[cur] == 0:
+        q.append(cur)
+        root.append(cur)
 
 while q:
     cur = q.popleft()
+    for node in graph[cur]:
+        indegree[node] -= 1
+        if indegree[node] == 0:
+            q.append(node)
+            child[cur].append(node)
 
-    for next in graph[cur]:
-        in_degree[next] -= 1
-        if in_degree[next] == 0:
-            answer[cur].append(next)
-            q.append(next)
-
-print(len(parent))
-print(*parent)
-for key in sorted(answer.keys()):
-    print(key, end=" ")
-    print(len(answer[key]), end=" ")
-    print(*sorted(answer[key]))
+print(str(len(root)) + "\n" + " ".join(sorted(root)))
+for cur in sorted(graph.keys()):
+    print(cur, str(len(child[cur])), end = " ")
+    print(" ".join(sorted(child[cur])))
