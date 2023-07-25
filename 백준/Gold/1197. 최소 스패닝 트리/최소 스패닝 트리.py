@@ -1,31 +1,27 @@
-from heapq import heappush, heappop, heapify
-from collections import defaultdict
+# kruskal algo
+def find(node):
+    if parent[node] != node:
+        parent[node] = find(parent[node])
+    return parent[node]
 
-def prim(start):
-    q = [*graph[start]]
-    visited = [False] * (V + 1)
-    visited[start] = True
-    answer = 0
-    heapify(q)
+def union(a, b):
+    a = find(a)
+    b = find(b)
 
-    while q:
-        cost, node = heappop(q)
-
-        if visited[node]:
-            continue
-        visited[node] = True
-        answer += cost
-        for next_cost, next in graph[node]:
-            if visited[next]:
-                continue
-            heappush(q, (next_cost, next))
-    return answer
+    if a < b:
+        parent[b] = a
+    else:
+        parent[a] = b
 
 V, E = map(int, input().split())
-graph = defaultdict(list)
+parent = [i for i in range(V + 1)]
+answer = 0
+edges = sorted([tuple(map(int, input().split())) for _ in range(E)], key=lambda x: x[2])
 
-for _ in range(E):
-    a, b, c = map(int, input().split())
-    graph[a].append((c, b))
-    graph[b].append((c, a))
-print(prim(1))
+for a, b, cost in edges:
+    if find(a) == find(b):
+        continue
+    union(a, b)
+    answer += cost
+
+print(answer)
