@@ -8,5 +8,5 @@ for room in test_room:
     answer += 1
     if pre_result == 0:
         continue
-    answer += pre_result // C + (1 if pre_result % C else 0)
+    answer += pre_result // C + (pre_result % C != 0)
 print(answer)
