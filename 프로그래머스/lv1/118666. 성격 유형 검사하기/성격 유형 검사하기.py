@@ -1,18 +1,12 @@
 def solution(survey, choices):
-    personal_dict = {c: 0 for c in "RTCFJMAN"}
-    check = {c: False for c in "RTCFJMAN"}
-    answer = ""
-    
+    counter = {c: 0 for c in ('R', 'T', 'C', 'F', 'J', 'M', 'A', 'N')}
     for s, c in zip(survey, choices):
         if c < 4:
-            personal_dict[s[0]] += 4 - c
-        elif c > 4:
-            personal_dict[s[1]] += c - 4
-            
-    for word in ["RT", "CF", "JM", "AN"]:
-        if personal_dict[word[0]] >= personal_dict[word[1]]:
-            answer += word[0]
+            counter[s[0]] += 4 - c
         else:
-            answer += word[1]
-            
+            counter[s[1]] += c - 4            
+    answer = 'R' if counter['R'] >= counter['T'] else 'T'
+    answer += 'C' if counter['C'] >= counter['F'] else 'F'
+    answer += 'J' if counter['J'] >= counter['M'] else 'M'
+    answer += 'A' if counter['A'] >= counter['N'] else 'N'
     return answer
