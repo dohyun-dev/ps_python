@@ -1,7 +1,6 @@
-answer = {6: 1, 5: 2, 4: 3, 3: 4, 2: 5, 1: 6, 0: 6}
+answer = [6, 6, 5, 4, 3, 2, 1]
 
 def solution(lottos, win_nums):
-    win_nums = set(win_nums)
     zero_count = lottos.count(0)
     count = 0
     for num in lottos:
