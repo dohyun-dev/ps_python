@@ -8,15 +8,5 @@ def convert(num, k):
         num = d
     return answer
 
-def solution(n, t, m, p):
-    nums = " "
-    answer = ""
-    
-    for i in range(m * t):
-        nums += convert(i, n)
-    
-    while len(answer) < t:
-        answer += nums[p]
-        p += m
-    
-    return answer
+def solution(n, t, m, p):    
+    return "".join(convert(i, n) for i in range(m * t))[p-1::m][:t]
