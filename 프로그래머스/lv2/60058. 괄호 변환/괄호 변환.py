@@ -27,5 +27,5 @@ def solution(p):
     if check(u):
         return u + solution(v)
     else:
-        return "(" + solution(v) + ")" + "".join(")" if c == "(" else "(" for c in u[1:-1])
+        return "(" + solution(v) + ")" + "".join(map(lambda x: ")" if x == "(" else "(", u[1:-1]))
     
