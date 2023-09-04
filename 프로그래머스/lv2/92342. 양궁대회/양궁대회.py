@@ -1,35 +1,26 @@
-answer_gap, answer = 0, [-1]
-N = 0
+from itertools import combinations_with_replacement
 
-def calc(total, info):
-    global answer_gap, answer
+def convert(ryan_info):
+    shot_result = [0] * 11
+    for r in ryan_info:
+        shot_result[10 - r] += 1
+    return shot_result
 
-    apeach, lion = 0, 0
+def calc(apeach, ryan):
+    apeach_score, ryan_score = 0, 0
     for i in range(11):
-        if total[i] == 0 and info[i] == 0:
-            continue
-        if total[i] > info[i]:
-            lion += 10 - i
+        if apeach[i] >= ryan[i]:
+            if apeach[i] != 0:
+                apeach_score += 10 - i
         else:
-            apeach += 10 - i
-
-    gap = abs(apeach - lion)
-
-    if lion > apeach and gap > answer_gap:
-        answer_gap = gap
-        answer = list(total)
-
-def dfs(info, l=0, idx=10, total=[0] * 11):
-    if l == N:
-        calc(total, info)
-        return
-    for i in range(idx, -1, -1):
-        total[i] += 1
-        dfs(info, l + 1, i, total)
-        total[i] -= 1
+            ryan_score += 10 - i
+    return ryan_score - apeach_score if ryan_score > apeach_score else -1
 
 def solution(n, info):
-    global N
-    N = n
-    dfs(info)
+    max_gap, answer = 0, [-1]
+    for combi in map(convert, combinations_with_replacement(range(0, 11), n)):
+        result = calc(info, combi)
+        if max_gap < result:
+            calc(info, combi)
+            max_gap, answer = result, list(combi)
     return answer
